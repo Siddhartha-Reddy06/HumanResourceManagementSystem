@@ -5,7 +5,11 @@
   "type": "commonjs",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "build": "npm install --production && npm install -g sequelize-cli",
+    "migrate": "npx sequelize-cli db:migrate",
+    "seed": "node src/seed.js",
+    "postinstall": "npm run migrate && npm run seed"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

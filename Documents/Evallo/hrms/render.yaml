@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: hrms-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DB_HOST
+        fromDatabase:
+          name: hrms-db
+          property: connectionString
+      - key: DB_NAME
+        fromDatabase:
+          name: hrms-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: hrms-db
+          property: user
+      - key: DB_PASS
+        fromDatabase:
+          name: hrms-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+        pattern: \w{32}
+
+  - type: web
+    name: hrms-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        sync: false  # This will be set to the backend service URL after deployment
+
+databases:
+  - name: hrms-db
+    databaseName: hrms_db
+    user: hrms_user
+    plan: free
